@@ -1,0 +1,140 @@
+# ASN CAPTCHA Proxy - Example Configuration
+# Copy this file to config.yaml and customize for your environment
+
+server:
+  port: 3000
+  host: "0.0.0.0"
+  keepAlive: true
+  keepAliveTimeout: 5000
+  
+  # SSL Configuration (optional)
+  # ssl:
+  #   cert: "/path/to/certificate.crt"
+  #   key: "/path/to/private.key"
+
+# Upstream server configuration
+apache:
+  upstream: "http://localhost:8080"
+  timeout: 30000
+  pool_size: 10
+  
+  # Headers to forward
+  headers:
+    - "X-Forwarded-For"
+    - "X-Real-IP"
+    - "X-Forwarded-Proto"
+    - "Host"
+
+# ASN filtering configuration
+asn:
+  sources:
+    # O-X-L Risk Database (JSON format)
+    - url: "https://raw.githubusercontent.com/O-X-L/risk-db/main/asn.json"
+      format: "json"
+      refresh_interval: 1800  # 30 minutes
+      
+    # NullifiedCode ASN Lists (TXT format)
+    - url: "https://raw.githubusercontent.com/NullifiedCode/ASN-Lists/main/malicious_asns.txt"
+      format: "txt"
+      refresh_interval: 1800
+  
+  # Custom ASN list (local file)
+  custom_list: "./config/custom_asn.json"
+  
+  # Cache settings
+  cache_ttl: 600  # 10 minutes
+  
+  # Action for blocked ASNs
+  action: "captcha"  # Options: captcha, block, log
+
+# CAPTCHA configuration
+captcha:
+  difficulty: "medium"  # Options: easy, medium, hard
+  expiry: 300          # 5 minutes
+  verification_ttl: 7200  # 2 hours
+  
+  # CAPTCHA appearance
+  width: 200
+  height: 80
+  noise: 2
+  color: true
+
+# IP resolution configuration
+ip_resolution:
+  # MaxMind database path
+  maxmind_db: "./data/GeoLite2-ASN.mmdb"
+  
+  # Fallback API services
+  fallback_apis:
+    - "https://ipapi.co/{ip}/json/"
+    - "https://ip-api.com/json/{ip}"
+  
+  # Cache settings
+  cache_ttl: 1800  # 30 minutes
+  
+  # Rate limiting for API calls
+  rate_limit: 100  # requests per minute
+
+# Logging configuration
+logging:
+  level: "info"  # Options: error, warn, info, debug
+  format: "combined"
+  
+  # File logging
+  file:
+    enabled: true
+    path: "./logs"
+    max_files: 30
+    max_size: "50m"
+  
+  # Console logging
+  console:
+    enabled: true
+    colorize: true
+
+# Performance settings
+performance:
+  # Request rate limiting
+  rate_limit:
+    window_ms: 60000  # 1 minute
+    max_requests: 100
+    
+  # Memory limits
+  max_memory_usage: "512m"
+  
+  # Connection limits
+  max_connections: 1000
+
+# Security settings
+security:
+  # Trusted proxy IPs
+  trusted_proxies:
+    - "127.0.0.1"
+    - "::1"
+  
+  # Security headers
+  headers:
+    x_frame_options: "DENY"
+    x_content_type_options: "nosniff"
+    x_xss_protection: "1; mode=block"
+  
+  # CORS settings
+  cors:
+    enabled: false
+    origin: "*"
+    methods: ["GET", "POST"]
+
+# Monitoring and health checks
+monitoring:
+  health_check:
+    enabled: true
+    path: "/health"
+    
+  metrics:
+    enabled: true
+    path: "/metrics"
+    
+  # Prometheus integration
+  prometheus:
+    enabled: false
+    port: 9090
