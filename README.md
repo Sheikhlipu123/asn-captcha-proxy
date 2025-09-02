@@ -237,8 +237,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - Email: support@yourproject.com
-- Issues: [GitHub Issues](https://github.com/yourusername/asn-captcha-proxy/issues)
-- Discussions: [GitHub Discussions](https://github.com/yourusername/asn-captcha-proxy/discussions)
+- Issues: [GitHub Issues](https://github.com/Sheikhlipu123/asn-captcha-proxy/issues)
+- Discussions: [GitHub Discussions](https://github.com/Sheikhlipu123/asn-captcha-proxy/discussions)
 
 ---
 
