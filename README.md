@@ -1,7 +1,7 @@
 # ASN CAPTCHA Proxy
 
 A high-performance reverse proxy server that protects Apache web servers by filtering traffic based on Autonomous System Numbers (ASN) and challenging suspicious requests with CAPTCHA verification.
-
+**Notice: This system is incomplete and contributions from developers are welcome.**
 ## Features
 
 - **ASN-Based Traffic Filtering**: Automatically blocks traffic from malicious ASNs using curated blocklists
