@@ -1,0 +1,42 @@
+# ASN Proxy Server Configuration
+
+server:
+  port: 3000
+  host: "0.0.0.0"
+  
+apache:
+  upstream: "http://localhost:8080"  # Your Apache server
+  
+asn:
+  # GitHub sources for ASN blocklists
+  sources:
+    - url: "https://raw.githubusercontent.com/O-X-L/risk-db/main/asn.json"
+      format: "json"
+      refresh_interval: 3600  # 1 hour in seconds
+    - url: "https://raw.githubusercontent.com/NullifiedCode/ASN-Lists/main/malicious_asns.txt"
+      format: "txt"
+      refresh_interval: 3600
+  
+  # Local custom ASN list
+  custom_list: "./config/custom_asn.json"
+  
+  # Cache settings
+  cache_ttl: 300  # 5 minutes
+  
+captcha:
+  # CAPTCHA settings
+  difficulty: "medium"  # easy, medium, hard
+  expiry: 300  # 5 minutes
+  verification_ttl: 3600  # 1 hour - how long a verified IP is remembered
+  
+ip_resolution:
+  # MaxMind GeoLite2 ASN database path
+  maxmind_db: "./data/GeoLite2-ASN.mmdb"
+  # Fallback API (optional)
+  fallback_api: "https://ipapi.co/{ip}/json/"
+  cache_ttl: 3600  # 1 hour
+  
+logging:
+  level: "info"  # debug, info, warn, error
+  max_files: 10
+  max_size: "10m"

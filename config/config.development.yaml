@@ -1,0 +1,33 @@
+# Development Configuration for ASN Proxy Server
+
+server:
+  port: 3000
+  host: "127.0.0.1"
+  
+apache:
+  upstream: "http://localhost:8080"
+  
+asn:
+  # Fewer sources for development
+  sources:
+    - url: "https://raw.githubusercontent.com/O-X-L/risk-db/main/asn.json"
+      format: "json"
+      refresh_interval: 3600  # 1 hour
+  
+  custom_list: "./config/custom_asn.json"
+  cache_ttl: 60  # 1 minute for testing
+  
+captcha:
+  difficulty: "easy"  # Easier for development
+  expiry: 600  # 10 minutes
+  verification_ttl: 1800  # 30 minutes
+  
+ip_resolution:
+  maxmind_db: "./data/GeoLite2-ASN.mmdb"
+  fallback_api: "https://ipapi.co/{ip}/json/"
+  cache_ttl: 300  # 5 minutes
+  
+logging:
+  level: "debug"  # More verbose logging
+  max_files: 5
+  max_size: "10m"

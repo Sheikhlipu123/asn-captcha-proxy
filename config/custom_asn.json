@@ -1,0 +1,24 @@
+{
+  "blocked_asns": [
+    {
+      "asn": 12345,
+      "org": "Example Malicious ISP",
+      "reason": "Known botnet activity",
+      "added_date": "2024-01-15"
+    },
+    {
+      "asn": 67890,
+      "org": "Another Bad Network",
+      "reason": "Spam source",
+      "added_date": "2024-01-20"
+    }
+  ],
+  "allowed_asns": [
+    {
+      "asn": 11111,
+      "org": "Trusted Corporate Network",
+      "reason": "Whitelisted corporate partner",
+      "added_date": "2024-01-10"
+    }
+  ]
+}
