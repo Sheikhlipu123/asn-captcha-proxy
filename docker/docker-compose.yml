@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  asn-proxy:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: asn-proxy
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+      - "443:3443"
+    environment:
+      - NODE_ENV=production
+      - ASN_PROXY_PORT=3000
+      - LOG_LEVEL=info
+    volumes:
+      - ../config:/app/config:ro
+      - asn-proxy-logs:/app/logs
+      - asn-proxy-data:/app/data
+    networks:
+      - asn-proxy-network
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    container_name: asn-proxy-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - asn-proxy-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: Web application backend
+  webapp:
+    image: nginx:alpine
+    container_name: webapp-backend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ../examples/webapp:/usr/share/nginx/html:ro
+    networks:
+      - asn-proxy-network
+
+volumes:
+  asn-proxy-logs:
+  asn-proxy-data:
+  redis-data:
+
+networks:
+  asn-proxy-network:
+    driver: bridge
